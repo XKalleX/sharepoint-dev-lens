@@ -22,12 +22,18 @@ Write-Host " SharePoint Dev Lens - Build"
 Write-Host " ===========================`n"
 
 # 1. Icons
-$icon16 = Join-Path $src 'icons\icon16.png'
-if (-not (Test-Path $icon16)) {
-    Write-Host " [1/3] Generating icons..."
+$iconSource = Join-Path $src 'icons\icon_source.png'
+$icon16     = Join-Path $src 'icons\icon16.png'
+
+if (Test-Path $iconSource) {
+    Write-Host " [1/3] icon_source.png gefunden – skaliere auf 16/48/128 px..."
+    & (Join-Path $root 'scripts\resize-icons.ps1')
+    if ($LASTEXITCODE -ne 0) { exit 1 }
+} elseif (-not (Test-Path $icon16)) {
+    Write-Host " [1/3] Kein icon_source.png – generiere Standard-Icons..."
     node (Join-Path $root 'scripts\generate-icons.js')
 } else {
-    Write-Host " [1/3] Icons present, skipping generation."
+    Write-Host " [1/3] Icons vorhanden, ueberspringe Generierung."
 }
 
 # 2. Chrome
