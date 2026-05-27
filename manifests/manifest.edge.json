@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "SharePoint Dev Lens",
+  "version": "1.0.0",
+  "description": "Inspect SharePoint lists, GUIDs, fields, permissions and developer URLs directly in Microsoft Edge. The practical inspector for SharePoint developers and consultants.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SharePoint Dev Lens",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.sharepoint.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "storage", "scripting", "sidePanel"],
+  "host_permissions": ["https://*.sharepoint.com/*"],
+  "optional_host_permissions": [
+    "https://*.sharepoint-df.com/*",
+    "https://*.sharepoint.de/*",
+    "https://*.sharepoint.us/*"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

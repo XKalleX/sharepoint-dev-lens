@@ -1,0 +1,98 @@
+name: Build & Package
+
+on:
+  push:
+    branches: [main, develop]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Extension
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate icons
+        run: npm run setup
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build Chrome
+        run: npm run build:chrome
+
+      - name: Build Edge
+        run: npm run build:edge
+
+      - name: Package Chrome
+        run: npm run zip:chrome
+
+      - name: Package Edge
+        run: npm run zip:edge
+
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sharepoint-dev-lens-chrome
+          path: dist/sharepoint-dev-lens-chrome-*.zip
+          retention-days: 30
+
+      - name: Upload Edge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sharepoint-dev-lens-edge
+          path: dist/sharepoint-dev-lens-edge-*.zip
+          retention-days: 30
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate icons
+        run: npm run setup
+
+      - name: Build & Package all targets
+        run: npm run package
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/sharepoint-dev-lens-chrome-*.zip
+            dist/sharepoint-dev-lens-edge-*.zip
+          generate_release_notes: true
+          draft: false
