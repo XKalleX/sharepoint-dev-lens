@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,22 +21,38 @@
     <div class="header-right">
       <span class="badge badge-sp hidden" id="sp-badge">SP</span>
       <span class="badge badge-warn hidden" id="warn-badge"></span>
-      <button class="icon-btn" id="refresh-btn" title="Refresh">↻</button>
+      <button class="lang-btn" id="lang-btn" title="Sprache wechseln">EN</button>
+      <button class="icon-btn" id="refresh-btn" title="Aktualisieren"></button>
     </div>
   </header>
 
   <nav class="tab-bar" id="tab-bar">
-    <button class="tab-btn active" data-tab="site">🏠<span>Site</span></button>
-    <button class="tab-btn" data-tab="lists" disabled>📋<span>Lists</span></button>
-    <button class="tab-btn" data-tab="fields" disabled>🔍<span>Fields</span></button>
-    <button class="tab-btn" data-tab="links">🔗<span>Links</span></button>
-    <button class="tab-btn" data-tab="export" disabled>⬇<span>Export</span></button>
+    <button class="tab-btn active" data-tab="site" id="tab-site"></button>
+    <button class="tab-btn" data-tab="lists" disabled id="tab-lists"></button>
+    <button class="tab-btn" data-tab="fields" disabled id="tab-fields"></button>
+    <button class="tab-btn" data-tab="links" id="tab-links"></button>
+    <button class="tab-btn" data-tab="export" disabled id="tab-export"></button>
   </nav>
 
   <main class="tab-content" id="tab-content">
     <!-- Rendered dynamically by sidepanel.js -->
   </main>
 
+</div>
+
+<!-- Write operation confirmation modal -->
+<div class="write-overlay" id="write-overlay">
+  <div class="write-modal">
+    <div class="write-modal-header" id="modal-header"></div>
+    <div class="write-modal-body">
+      <div class="write-modal-msg" id="modal-msg"></div>
+      <div class="write-modal-warn" id="modal-warn"></div>
+    </div>
+    <div class="write-modal-footer">
+      <button class="btn btn-secondary" id="modal-cancel"></button>
+      <button class="btn btn-danger" id="modal-confirm"></button>
+    </div>
+  </div>
 </div>
 
 <script type="module" src="js/sidepanel.js"></script>
